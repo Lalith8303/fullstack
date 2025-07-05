@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Filter from "./Filter";
 import JobList from "./JobList";
 import { fetchJobs } from "../api/jobApi";
@@ -10,7 +10,7 @@ export default function JobBoard() {
     search: "",
     location: "",
     jobType: "",
-    salaryRange: [0, 100],
+    salaryRange: [3, 20], // LPA range
   });
 
   useEffect(() => {
@@ -20,25 +20,27 @@ export default function JobBoard() {
     });
   }, []);
 
-  const applyFilters = () => {
+  useEffect(() => {
     const filtered = jobs.filter((job) => {
-      const searchMatch = job.title.toLowerCase().includes(filters.search.toLowerCase());
+      const titleMatch = job.title.toLowerCase().includes(filters.search.toLowerCase());
       const locationMatch = filters.location ? job.location === filters.location : true;
-      const typeMatch = filters.jobType ? job.jobType === filters.jobType : true;
-      const salaryNum = parseInt(job.salary);
-      const salaryMatch =
-        salaryNum >= filters.salaryRange[0] && salaryNum <= filters.salaryRange[1];
+      const jobTypeMatch = filters.jobType ? job.workMode === filters.jobType : true;
 
-      return searchMatch && locationMatch && typeMatch && salaryMatch;
+      const salaryNumber = parseInt(job.salary); // "10 LPA" → 10
+      const salaryMatch =
+        salaryNumber >= filters.salaryRange[0] &&
+        salaryNumber <= filters.salaryRange[1];
+
+      return titleMatch && locationMatch && jobTypeMatch && salaryMatch;
     });
 
     setFilteredJobs(filtered);
-  };
+  }, [filters, jobs]); // 👈 Runs every time filter changes
 
   return (
-    <div>
-      <Filter filters={filters} setFilters={setFilters} onSearch={applyFilters} />
+    <>
+      <Filter filters={filters} setFilters={setFilters} />
       <JobList jobs={filteredJobs} />
-    </div>
+    </>
   );
 }

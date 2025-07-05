@@ -1,32 +1,28 @@
-import { useState } from 'react';
-
-const SalarySlider = () => {
-  const [value, setValue] = useState(50); // default ₹50k
-
+// SalaryRangeSlider.jsx
+const SalarySlider = ({ value, onChange }) => {
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="flex justify-between mb-2">
-        <label className="text-sm font-medium text-gray-700">Salary Per Month</label>
-        <span className="text-sm font-medium text-gray-700">₹{value}k</span>
+        <label className="text-sm font-medium text-gray-700">Salary (Max)</label>
+        <span className="text-sm font-medium text-gray-700">{value} LPA</span>
       </div>
 
-      {/* Input Range */}
       <input
         type="range"
-        min="0"
-        max="100"
+        min="3"
+        max="20"
+        step="1"
         value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
+        onChange={(e) => onChange(Number(e.target.value))}
         className="w-full appearance-none"
         style={{
-          background: `linear-gradient(to right, black ${value}%, #d1d5db ${value}%)`,
+          background: `linear-gradient(to right, black ${(value - 3) * 5.88}%, #d1d5db ${(value - 3) * 5.88}%)`,
           height: '6px',
           borderRadius: '9999px',
           outline: 'none',
         }}
       />
 
-      {/* Thumb styling */}
       <style jsx>{`
         input[type='range']::-webkit-slider-thumb {
           -webkit-appearance: none;
@@ -41,7 +37,6 @@ const SalarySlider = () => {
           z-index: 10;
           position: relative;
         }
-
         input[type='range']::-moz-range-thumb {
           height: 20px;
           width: 20px;
