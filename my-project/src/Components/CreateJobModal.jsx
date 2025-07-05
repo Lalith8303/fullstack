@@ -34,7 +34,8 @@ export default function CreateJobModal({ onClose, onJobCreated }) {
     };
 
     try {
-      const res = await axios.post("http://localhost:5000/api/jobs", jobData);
+      const res = await axios.post("https://fullstack-2qpr.onrender.com/api/jobs", jobData);
+
       console.log("✅ Job created:", res.data);
       setForm(initialForm);
       if (onJobCreated) onJobCreated(res.data);
